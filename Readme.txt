@@ -1,4 +1,5 @@
---- AntTweakBar development library ---
+AntTweakBar development library
+-------------------------------
 
 
 AntTweakBar is a small and easy-to-use C/C++ library that allows programmers
@@ -10,6 +11,3 @@ for Windows, GNU/Linux and OSX, and some program examples (sources + binaries).
 
 For installation and documentation please refer to:
 http://anttweakbar.sourceforge.net/doc
-
-
-Philippe Decaudin
