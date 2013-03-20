@@ -41,6 +41,7 @@ int g_InitWndWidth = -1;
 int g_InitWndHeight = -1;
 TwCopyCDStringToClient  g_InitCopyCDStringToClient = NULL;
 TwCopyStdStringToClient g_InitCopyStdStringToClient = NULL;
+float g_FontScaling = 1.0f;
 
 // multi-windows
 const int TW_MASTER_WINDOW_ID = 0;
@@ -1915,7 +1916,7 @@ int ANT_CALL TwInit(ETwGraphAPI _GraphAPI, void *_Device)
     g_Wnds[TW_MASTER_WINDOW_ID] = g_TwMasterMgr;
     g_TwMgr = g_TwMasterMgr;
 
-    TwGenerateDefaultFonts();
+    TwGenerateDefaultFonts(g_FontScaling);
     g_TwMgr->m_CurrentFont = g_DefaultNormalFont;
 
     int Res = TwCreateGraph(_GraphAPI);
@@ -4638,6 +4639,33 @@ static inline std::string ErrorPosition(bool _MultiLine, int _Line, int _Column)
 int ANT_CALL TwDefine(const char *_Def)
 {
     CTwFPU fpu; // force fpu precision
+
+    // hack to scale fonts artificially (for retina display for instance)
+    if( g_TwMgr==NULL && _Def!=NULL )
+    {
+        size_t l = strlen(_Def);
+        const char *eq = strchr(_Def, '=');
+        if( eq!=NULL && eq!=_Def && l>0 && l<512 )
+        {
+            char *a = new char[l];
+            char *b = new char[l];
+            if( sscanf(_Def, "%s%s", a, b)==2 && strcmp(a, "GLOBAL")==0 )
+            {
+                if( strchr(b, '=') != NULL )
+                    *strchr(b, '=') = '\0';
+                double scal = 1.0;
+                if( _stricmp(b, "fontscaling")==0 && sscanf(eq+1, "%lf", &scal)==1 && scal>0 )
+                {
+                    g_FontScaling = (float)scal;
+                    delete[] a;
+                    delete[] b;
+                    return 1;
+                }
+            }
+            delete[] a;
+            delete[] b;
+        }
+    }
 
     if( g_TwMgr==NULL )
     {
