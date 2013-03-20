@@ -1,5 +1,23 @@
 --- AntTweakBar library change log ---
 
+* Version 1.16 (2013/03/21)
+
+  - Moved AntTweakBar documentation to sourceforge, available at: 
+    http://anttweakbar.sourceforge.net/doc
+  - AntTweakBar source code repository is now on sourceforge too at: 
+    http://sourceforge.net/projects/anttweakbar
+  - Fixed several issues with the core profile on OSX 10.8 (Thanks to 
+    Christoph G., George P. and Robert H. for their help).
+  - Fixed unwanted repeated key pressed (Thanks to Alec J. for the patch).
+  - Added Visual Studio 2012 projects to the repository.
+  - Memory representation of std::string has changed again with Visual Studio
+    2012. Handled it.
+  - Modified Linux and OSX Makefiles to build also static version of the library
+    in addition to dynamic library (Thanks to Luigi R.).
+  - Fonts can be scaled globally through the "fontscaling" parameter, may be 
+    useful for high density display (Suggested by Eric RH.).
+  - Fixed compilation issue with different system locale (Reported by Arnaud M.)
+
 * Version 1.15 (2012/07/22)
 
   - Added support for OpenGL Core Profile (3.2 and higher); it is enabled by 
