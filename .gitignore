@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.asp
+*.pch
 /src/debug32
 /src/debug64
 /src/release32
