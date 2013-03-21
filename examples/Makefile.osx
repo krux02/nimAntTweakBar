@@ -2,12 +2,12 @@
 
 
 #---- Release
-CXXCFG   	= -O3 -arch i386 -arch x86_64
-LFLAGS		= -L../lib -arch i386 -arch x86_64
+CXXCFG   	= -O3
+LFLAGS		= -L../lib
 OUT_DIR		= bin64
 #---- Debug
-#CXXCFG   	= -g -D_DEBUG -arch i386 -arch x86_64
-#LFLAGS		= -Wl -L../lib/debug64 -arch i386 -arch x86_64
+#CXXCFG   	= -g -D_DEBUG
+#LFLAGS		= -Wl -L../lib/debug64
 #OUT_DIR	= debug64
 
 
