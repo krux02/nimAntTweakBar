@@ -4647,8 +4647,8 @@ int ANT_CALL TwDefine(const char *_Def)
         const char *eq = strchr(_Def, '=');
         if( eq!=NULL && eq!=_Def && l>0 && l<512 )
         {
-            char *a = new char[l];
-            char *b = new char[l];
+            char *a = new char[l+1];
+            char *b = new char[l+1];
             if( sscanf(_Def, "%s%s", a, b)==2 && strcmp(a, "GLOBAL")==0 )
             {
                 if( strchr(b, '=') != NULL )
