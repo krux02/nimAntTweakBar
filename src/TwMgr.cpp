@@ -3477,6 +3477,24 @@ int ANT_CALL TwRefreshBar(TwBar *bar)
 
 //  ---------------------------------------------------------------------------
 
+TwBar * ANT_CALL TwGetActiveBar()
+{
+    if( g_TwMgr==NULL )
+    {
+        TwGlobalError(g_ErrNotInit);
+        return NULL; // not initialized
+    }
+
+    vector<TwBar*>::iterator BarIt;
+    for( BarIt=g_TwMgr->m_Bars.begin(); BarIt!=g_TwMgr->m_Bars.end(); ++BarIt )
+        if( *BarIt!=NULL && !(*BarIt)->IsMinimized() && !(*BarIt)->m_IsPopupList && (*BarIt)->GetFocus()==true )
+            return *BarIt;
+
+    return NULL;
+}
+
+//  ---------------------------------------------------------------------------
+
 int BarVarHasAttrib(CTwBar *_Bar, CTwVar *_Var, const char *_Attrib, bool *_HasValue);
 int BarVarSetAttrib(CTwBar *_Bar, CTwVar *_Var, CTwVarGroup *_VarParent, int _VarIndex, int _AttribID, const char *_Value);
 ERetType BarVarGetAttrib(CTwBar *_Bar, CTwVar *_Var, CTwVarGroup *_VarParent, int _VarIndex, int _AttribID, std::vector<double>& outDouble, std::ostringstream& outString);

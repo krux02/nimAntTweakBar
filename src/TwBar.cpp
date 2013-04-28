@@ -6010,7 +6010,7 @@ static void ANT_CALL PopupCallback(void *_ClientData)
         {
             Var->ValueFromDouble(Enum);
             //Bar->UnHighlightLine();
-            Bar->HaveFocus(true);
+            Bar->SetFocus(true);
             Bar->NotUpToDate();
         }
         if( g_TwMgr->m_PopupBar!=NULL ) // check again because it might have been destroyed by an enum callback
