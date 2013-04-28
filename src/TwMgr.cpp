@@ -2410,7 +2410,16 @@ int CTwMgr::SetAttrib(int _AttribID, const char *_Value)
     case MGR_FONT_STYLE:
         if( _Value && strlen(_Value)>0 )
         {
-            if( _stricmp(_Value, "fixed")==0 )
+            if( _stricmp(_Value, "fixedru")==0 )
+            {
+                if( m_CurrentFont!=g_DefaultFixedRuFont )
+                {
+                    SetFont(g_DefaultFixedRuFont, true);
+                    m_FontResizable = false; // for now fixed font is not resizable
+                }
+                return 1;
+            } 
+            else if( _stricmp(_Value, "fixed")==0 )
             {
                 if( m_CurrentFont!=g_DefaultFixed1Font )
                 {
