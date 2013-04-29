@@ -4195,7 +4195,7 @@ static int AddVar(TwBar *_Bar, const char *_Name, ETwType _Type, void *_VarPtr, 
 
         _Bar->m_VarRoot.m_Vars.push_back(Var);
         int LineInHier = _Bar->LineInHier(&(_Bar->m_VarRoot), Var);
-        if( LineInHier>=0 && LineInHier<=_Bar->m_FirstLine )
+        if( LineInHier>=0 && LineInHier<_Bar->m_FirstLine )
             _Bar->m_FirstLine++; // if the added var is before the first visible var, then increment m_FirstLine
         _Bar->NotUpToDate();
         g_TwMgr->m_HelpBarNotUpToDate = true;
