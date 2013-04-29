@@ -4194,6 +4194,9 @@ static int AddVar(TwBar *_Bar, const char *_Name, ETwType _Type, void *_VarPtr, 
         }
 
         _Bar->m_VarRoot.m_Vars.push_back(Var);
+        int LineInHier = _Bar->LineInHier(&(_Bar->m_VarRoot), Var);
+        if( LineInHier>=0 && LineInHier<=_Bar->m_FirstLine )
+            _Bar->m_FirstLine++; // if the added var is before the first visible var, then increment m_FirstLine
         _Bar->NotUpToDate();
         g_TwMgr->m_HelpBarNotUpToDate = true;
 
@@ -4414,10 +4417,13 @@ int ANT_CALL TwRemoveVar(TwBar *_Bar, const char *_Name)
             return 0;
         }
 
+        int LineInHier = _Bar->LineInHier(&(_Bar->m_VarRoot), Var);
         delete Var;
         Parent->m_Vars.erase(Parent->m_Vars.begin()+Index);
         if( Parent!=&(_Bar->m_VarRoot) && Parent->m_Vars.size()<=0 )
             TwRemoveVar(_Bar, Parent->m_Name.c_str());
+        if( LineInHier>=0 && LineInHier<_Bar->m_FirstLine )
+            _Bar->m_FirstLine--; // if the removed var is before the first visible var, then decrement m_FirstLine
         _Bar->NotUpToDate();
         if( _Bar!=g_TwMgr->m_HelpBar )
             g_TwMgr->m_HelpBarNotUpToDate = true;
@@ -4458,6 +4464,7 @@ int ANT_CALL TwRemoveAllVars(TwBar *_Bar)
             *it = NULL;
         }
     _Bar->m_VarRoot.m_Vars.resize(0);
+    _Bar->m_FirstLine = 0;  // reset scrollbar
     _Bar->NotUpToDate();
     g_TwMgr->m_HelpBarNotUpToDate = true;
     return 1;
