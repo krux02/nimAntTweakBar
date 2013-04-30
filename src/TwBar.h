@@ -211,6 +211,7 @@ struct CTwBar
     void                    SetFocus(bool _Focus) { m_DrawHandles = _Focus; }            // used by PopupCallback
     bool                    GetFocus() const { return m_DrawHandles; }
     void                    StopEditInPlace() { if( m_EditInPlace.m_Active ) EditInPlaceEnd(false); }
+    void                    CheckScrollbar(int NbHierLinesDelta);
                             CTwBar(const char *_Name);
                             ~CTwBar();
 

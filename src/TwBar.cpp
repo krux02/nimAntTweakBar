@@ -5468,6 +5468,16 @@ void CTwBar::Draw(int _DrawPart)
 
 //  ---------------------------------------------------------------------------
 
+void TwBar::CheckScrollbar(int NbHierLinesDelta)
+{
+    if( m_FirstLine>m_NbHierLines+NbHierLinesDelta-m_NbDisplayedLines )
+        m_FirstLine = m_NbHierLines+NbHierLinesDelta-m_NbDisplayedLines;
+    if( m_FirstLine<0 )
+        m_FirstLine = 0;
+}
+
+//  ---------------------------------------------------------------------------
+
 bool CTwBar::MouseMotion(int _X, int _Y)
 {
     assert(g_TwMgr->m_Graph && g_TwMgr->m_WndHeight>0 && g_TwMgr->m_WndWidth>0);
