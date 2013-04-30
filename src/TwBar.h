@@ -209,7 +209,7 @@ struct CTwBar
     int                     LineInHier(CTwVarGroup *_Root, CTwVar *_Var); // returns the number of the line associated to _Var
     void                    UnHighlightLine() { m_HighlightedLine = -1; NotUpToDate(); } // used by PopupCallback
     void                    SetFocus(bool _Focus) { m_DrawHandles = _Focus; }            // used by PopupCallback
-    bool                    GetFocus() const { return m_DrawHandles; }
+    bool                    GetFocus() const { return m_DrawHandles || m_EditInPlace.m_Active; }
     void                    StopEditInPlace() { if( m_EditInPlace.m_Active ) EditInPlaceEnd(false); }
     void                    CheckScrollbar(int NbHierLinesDelta);
                             CTwBar(const char *_Name);
