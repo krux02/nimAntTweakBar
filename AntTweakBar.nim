@@ -20,10 +20,10 @@
 
 const TW_VERSION* = 116
 
-# gcc -c -O3 -Wall -fPIC -fno-strict-aliasing -D_UNIX -D__PLACEMENT_NEW_INLINE -I../include -I/usr/local/include -I/usr/X11R6/include -I/usr/include -o
 {.passC: "-IcAntTweakBar/include".}
 {.passC: "-O3 -Wall -fPIC -fno-strict-aliasing -D__PLACEMENT_NEW_INLINE".}
 {.passL: "-lGL -lm -lstdc++".}
+
 when defined(windows):
   {.compile: "cAntTweakBar/src/TwEventWin.c".}
   {.compile: "cAntTweakBar/src/TwDirect3D10.cpp".}
@@ -282,34 +282,22 @@ else:
 
 ## # For GLUT event callbacks (Windows calling convention for GLUT callbacks is cdecl)
     
-proc TwEventMouseButtonGLUT*(glutButton: cint; glutState: cint; mouseX: cint;
-                            mouseY: cint): cint {.cdecl,
-    importc: "TwEventMouseButtonGLUT".}
-
-proc TwEventMouseMotionGLUT*(mouseX: cint; mouseY: cint): cint {.cdecl,
-    importc: "TwEventMouseMotionGLUT".}
-
-proc TwEventKeyboardGLUT*(glutKey: cuchar; mouseX: cint; mouseY: cint): cint {.cdecl,
-    importc: "TwEventKeyboardGLUT".}
-
-proc TwEventSpecialGLUT*(glutKey: cint; mouseX: cint; mouseY: cint): cint {.cdecl,
-    importc: "TwEventSpecialGLUT".}
-
-proc TwGLUTModifiersFunc*(glutGetModifiersFunc: proc (): cint {.stdcall.}): cint {.
-    importc: "TwGLUTModifiersFunc".}
+proc TwEventMouseButtonGLUT*(glutButton, glutState, mouseX, mouseY: cint): cint 
+  {.cdecl, importc: "TwEventMouseButtonGLUT".} 
+proc TwEventMouseMotionGLUT*(mouseX, mouseY: cint): cint 
+  {.cdecl, importc: "TwEventMouseMotionGLUT".}
+proc TwEventKeyboardGLUT*(glutKey: cuchar; mouseX, mouseY: cint): cint
+  {.cdecl, importc: "TwEventKeyboardGLUT".}
+proc TwEventSpecialGLUT*(glutKey, mouseX, mouseY: cint): cint
+  {.cdecl, importc: "TwEventSpecialGLUT".}
+proc TwGLUTModifiersFunc*(glutGetModifiersFunc: proc (): cint {.stdcall.}): cint
+  {.importc: "TwGLUTModifiersFunc".}
 
 type
-  GLUTmousebuttonfun* = proc (glutButton: cint; glutState: cint; mouseX: cint;
-                           mouseY: cint) {.cdecl.}
-  
-type
-  GLUTmousemotionfun* = proc (mouseX: cint; mouseY: cint) {.cdecl.}
-
-type
-  GLUTkeyboardfun* = proc (glutKey: cuchar; mouseX: cint; mouseY: cint) {.cdecl.}
-
-type
-  GLUTspecialfun* = proc (glutKey: cint; mouseX: cint; mouseY: cint) {.cdecl.}
+  GLUTmousebuttonfun* = proc (glutButton, glutState, mouseX, mouseY: cint) {.cdecl.}
+  GLUTmousemotionfun* = proc (mouseX, mouseY: cint) {.cdecl.}
+  GLUTkeyboardfun* = proc (glutKey: cuchar; mouseX, mouseY: cint) {.cdecl.}
+  GLUTspecialfun* = proc (glutKey, mouseX, mouseY: cint) {.cdecl.}
 
 ## # For SFML event loop
 
