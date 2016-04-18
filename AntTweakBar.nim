@@ -18,8 +18,44 @@
 
 ## # Version Mmm : M=Major mm=minor (e.g., 102 is version 1.02)
 
-const
-  TW_VERSION* = 116
+const TW_VERSION* = 116
+
+# gcc -c -O3 -Wall -fPIC -fno-strict-aliasing -D_UNIX -D__PLACEMENT_NEW_INLINE -I../include -I/usr/local/include -I/usr/X11R6/include -I/usr/include -o
+{.passC: "-IcAntTweakBar/include".}
+{.passC: "-O3 -Wall -fPIC -fno-strict-aliasing -D__PLACEMENT_NEW_INLINE".}
+{.passL: "-lGL -lm -lstdc++".}
+when defined(windows):
+  {.compile: "cAntTweakBar/src/TwEventWin.c".}
+  {.compile: "cAntTweakBar/src/TwDirect3D10.cpp".}
+  {.compile: "cAntTweakBar/src/TwDirect3D11.cpp".}
+  {.compile: "cAntTweakBar/src/TwDirect3D9.cpp".}
+else:
+  {.passL: "-lX11".}
+  {.passC: "-I/usr/X11R6/include -D_UNIX".}
+  {.compile: "cAntTweakBar/src/TwEventX11.c".}
+
+{.compile: "cAntTweakBar/src/LoadOGL.cpp".}
+{.compile: "cAntTweakBar/src/LoadOGLCore.cpp".}
+{.compile: "cAntTweakBar/src/TwBar.cpp".}
+{.compile: "cAntTweakBar/src/TwColors.cpp".}
+{.compile: "cAntTweakBar/src/TwEventGLFW.c".}
+{.compile: "cAntTweakBar/src/TwEventGLUT.c".}
+{.compile: "cAntTweakBar/src/TwEventSDL.c".}
+{.compile: "cAntTweakBar/src/TwEventSDL12.c".}
+{.compile: "cAntTweakBar/src/TwEventSDL13.c".}
+{.compile: "cAntTweakBar/src/TwEventSDL20.c".}
+{.compile: "cAntTweakBar/src/TwEventSFML.cpp".}
+{.compile: "cAntTweakBar/src/TwFonts.cpp".}
+{.compile: "cAntTweakBar/src/TwMgr.cpp".}
+{.compile: "cAntTweakBar/src/TwOpenGL.cpp".}
+{.compile: "cAntTweakBar/src/TwOpenGLCore.cpp".}
+{.compile: "cAntTweakBar/src/TwPrecomp.cpp".}
+#const make_result = staticExec("make -C cAntTweakBar/src")
+#const current_dir = staticExec("pwd")
+#static:
+#  echo "current dir:", current_dir
+#  echo make_result
+#{.link: "cAntTweakBar/lib/libAntTweakBar.a".}
 
 ## # ----------------------------------------------------------------------------
 ## #  Bar functions and definitions
@@ -30,30 +66,20 @@ type
 
 ## # structure CTwBar is not exposed.
 
-proc TwNewBar*(barName: cstring): ptr TwBar {.stdcall, importc: "TwNewBar",
-    dynlib: "AntTweakBar".}
-proc TwDeleteBar*(bar: ptr TwBar): cint {.stdcall, importc: "TwDeleteBar",
-                                     dynlib: "AntTweakBar".}
-proc TwDeleteAllBars*(): cint {.stdcall, importc: "TwDeleteAllBars",
-                             dynlib: "AntTweakBar".}
-proc TwSetTopBar*(bar: ptr TwBar): cint {.stdcall, importc: "TwSetTopBar",
-                                     dynlib: "AntTweakBar".}
-proc TwGetTopBar*(): ptr TwBar {.stdcall, importc: "TwGetTopBar", dynlib: "AntTweakBar".}
-proc TwSetBottomBar*(bar: ptr TwBar): cint {.stdcall, importc: "TwSetBottomBar",
-                                        dynlib: "AntTweakBar".}
-proc TwGetBottomBar*(): ptr TwBar {.stdcall, importc: "TwGetBottomBar",
-                                dynlib: "AntTweakBar".}
-proc TwGetBarName*(bar: ptr TwBar): cstring {.stdcall, importc: "TwGetBarName",
-    dynlib: "AntTweakBar".}
-proc TwGetBarCount*(): cint {.stdcall, importc: "TwGetBarCount", dynlib: "AntTweakBar".}
-proc TwGetBarByIndex*(barIndex: cint): ptr TwBar {.stdcall,
-    importc: "TwGetBarByIndex", dynlib: "AntTweakBar".}
-proc TwGetBarByName*(barName: cstring): ptr TwBar {.stdcall,
-    importc: "TwGetBarByName", dynlib: "AntTweakBar".}
-proc TwRefreshBar*(bar: ptr TwBar): cint {.stdcall, importc: "TwRefreshBar",
-                                      dynlib: "AntTweakBar".}
-proc TwGetActiveBar*(): ptr TwBar {.stdcall, importc: "TwGetActiveBar",
-                                dynlib: "AntTweakBar".}
+proc TwNewBar*(barName: cstring): ptr TwBar {.importc:"TwNewBar" .}
+proc TwDeleteBar*(bar: ptr TwBar): cint {.importc:"TwDeleteBar" .}
+proc TwDeleteAllBars*(): cint {.importc: "TwDeleteAllBars".}
+proc TwSetTopBar*(bar: ptr TwBar): cint {.importc: "TwSetTopBar".}
+proc TwGetTopBar*(): ptr TwBar {.importc: "TwGetTopBar".}
+proc TwSetBottomBar*(bar: ptr TwBar): cint {.importc: "TwSetBottomBar".}
+proc TwGetBottomBar*(): ptr TwBar {.importc: "TwGetBottomBar".}
+proc TwGetBarName*(bar: ptr TwBar): cstring {.importc: "TwGetBarName".}
+proc TwGetBarCount*(): cint {.importc: "TwGetBarCount".}
+proc TwGetBarByIndex*(barIndex: cint): ptr TwBar {.importc: "TwGetBarByIndex".}
+proc TwGetBarByName*(barName: cstring): ptr TwBar {.importc: "TwGetBarByName".}
+proc TwRefreshBar*(bar: ptr TwBar): cint {.importc: "TwRefreshBar".}
+proc TwGetActiveBar*(): ptr TwBar {.importc: "TwGetActiveBar".}
+
 ## # ----------------------------------------------------------------------------
 ## #  Var functions and definitions
 ## # ----------------------------------------------------------------------------
@@ -79,29 +105,22 @@ template TW_TYPE_CSSTRING*(n: int): TwType =
   cast[TwType](0x30000000 + ((n) and 0x0FFFFFFF)) ## # Null-terminated C Static String of size n (defined as char[n], with n<2^28)
   
 type
-  TwSetVarCallback* = proc (value: pointer; clientData: pointer) {.stdcall.}
-  TwGetVarCallback* = proc (value: pointer; clientData: pointer) {.stdcall.}
-  TwButtonCallback* = proc (clientData: pointer) {.stdcall.}
+  TwSetVarCallback* = proc (value: pointer; clientData: pointer)
+  TwGetVarCallback* = proc (value: pointer; clientData: pointer)
+  TwButtonCallback* = proc (clientData: pointer)
 
 proc TwAddVarRW*(bar: ptr TwBar; name: cstring; `type`: TwType; `var`: pointer;
-                def: cstring): cint {.stdcall, importc: "TwAddVarRW",
-                                   dynlib: "AntTweakBar".}
+                def: cstring): cint {.importc: "TwAddVarRW".}
 proc TwAddVarRO*(bar: ptr TwBar; name: cstring; `type`: TwType; `var`: pointer;
-                def: cstring): cint {.stdcall, importc: "TwAddVarRO",
-                                   dynlib: "AntTweakBar".}
+                def: cstring): cint {.importc: "TwAddVarRO".}
 proc TwAddVarCB*(bar: ptr TwBar; name: cstring; `type`: TwType;
                 setCallback: TwSetVarCallback; getCallback: TwGetVarCallback;
-                clientData: pointer; def: cstring): cint {.stdcall,
-    importc: "TwAddVarCB", dynlib: "AntTweakBar".}
+                clientData: pointer; def: cstring): cint {.importc: "TwAddVarCB".}
 proc TwAddButton*(bar: ptr TwBar; name: cstring; callback: TwButtonCallback;
-                 clientData: pointer; def: cstring): cint {.stdcall,
-    importc: "TwAddButton", dynlib: "AntTweakBar".}
-proc TwAddSeparator*(bar: ptr TwBar; name: cstring; def: cstring): cint {.stdcall,
-    importc: "TwAddSeparator", dynlib: "AntTweakBar".}
-proc TwRemoveVar*(bar: ptr TwBar; name: cstring): cint {.stdcall,
-    importc: "TwRemoveVar", dynlib: "AntTweakBar".}
-proc TwRemoveAllVars*(bar: ptr TwBar): cint {.stdcall, importc: "TwRemoveAllVars",
-    dynlib: "AntTweakBar".}
+                 clientData: pointer; def: cstring): cint {.importc: "TwAddButton".}
+proc TwAddSeparator*(bar: ptr TwBar; name: cstring; def: cstring): cint {.importc: "TwAddSeparator".}
+proc TwRemoveVar*(bar: ptr TwBar; name: cstring): cint {.importc: "TwRemoveVar".} 
+proc TwRemoveAllVars*(bar: ptr TwBar): cint {.importc: "TwRemoveAllVars".}
 type
   TwEnumVal* = object
     Value*: cint
@@ -114,26 +133,25 @@ type
     DefString*: cstring
 
   TwSummaryCallback* = proc (summaryString: cstring; summaryMaxLength: csize;
-                          value: pointer; clientData: pointer) {.stdcall.}
+                          value: pointer; clientData: pointer)
 
-proc TwDefine*(def: cstring): cint {.stdcall, importc: "TwDefine", dynlib: "AntTweakBar".}
+proc TwDefine*(def: cstring): cint {.importc: "TwDefine".}
 proc TwDefineEnum*(name: cstring; enumValues: ptr TwEnumVal; nbValues: cuint): TwType {.
-    stdcall, importc: "TwDefineEnum", dynlib: "AntTweakBar" .}
-proc TwDefineEnumFromString*(name: cstring; enumString: cstring): TwType {.stdcall,
-    importc: "TwDefineEnumFromString", dynlib: "AntTweakBar".}
+    importc: "TwDefineEnum" .}
+proc TwDefineEnumFromString*(name: cstring; enumString: cstring): TwType {.importc: "TwDefineEnumFromString".}
 proc TwDefineStruct*(name: cstring; structMembers: ptr TwStructMember;
                     nbMembers: cuint; structSize: csize;
                     summaryCallback: TwSummaryCallback; summaryClientData: pointer): TwType {.
-    stdcall, importc: "TwDefineStruct", dynlib: "AntTweakBar".}
+    importc: "TwDefineStruct".}
 type
   TwCopyCDStringToClient* = proc (destinationClientStringPtr: cstringArray;
                                sourceString: cstring) {.stdcall.}
 
 proc TwCopyCDStringToClientFunc*(copyCDStringFunc: TwCopyCDStringToClient) {.
-    stdcall, importc: "TwCopyCDStringToClientFunc", dynlib: "AntTweakBar".}
+    importc: "TwCopyCDStringToClientFunc".}
 proc TwCopyCDStringToLibrary*(destinationLibraryStringPtr: cstringArray;
                              sourceClientString: cstring) {.stdcall,
-    importc: "TwCopyCDStringToLibrary", dynlib: "AntTweakBar".}
+    importc: "TwCopyCDStringToLibrary".}
 type
   TwParamValueType* {.size: sizeof(cint).} = enum
     TW_PARAM_INT32, TW_PARAM_FLOAT, TW_PARAM_DOUBLE, TW_PARAM_CSTRING ## # 
@@ -142,12 +160,10 @@ type
 
 proc TwGetParam*(bar: ptr TwBar; varName: cstring; paramName: cstring;
                 paramValueType: TwParamValueType; outValueMaxCount: cuint;
-                outValues: pointer): cint {.stdcall, importc: "TwGetParam",
-    dynlib: "AntTweakBar".}
+                outValues: pointer): cint {.importc: "TwGetParam".}
 proc TwSetParam*(bar: ptr TwBar; varName: cstring; paramName: cstring;
                 paramValueType: TwParamValueType; inValueCount: cuint;
-                inValues: pointer): cint {.stdcall, importc: "TwSetParam",
-                                        dynlib: "AntTweakBar".}
+                inValues: pointer): cint {.importc: "TwSetParam".}
 ## # ----------------------------------------------------------------------------
 ## #  Management functions and definitions
 ## # ----------------------------------------------------------------------------
@@ -158,20 +174,15 @@ type
     TW_OPENGL_CORE = 5
 
 
-proc TwInit*(graphAPI: TwGraphAPI; device: pointer): cint {.stdcall, importc: "TwInit",
-    dynlib: "AntTweakBar".}
-proc TwTerminate*(): cint {.stdcall, importc: "TwTerminate", dynlib: "AntTweakBar".}
-proc TwDraw*(): cint {.stdcall, importc: "TwDraw", dynlib: "AntTweakBar".}
-proc TwWindowSize*(width: cint; height: cint): cint {.stdcall, importc: "TwWindowSize",
-    dynlib: "AntTweakBar".}
-proc TwSetCurrentWindow*(windowID: cint): cint {.stdcall,
-    importc: "TwSetCurrentWindow", dynlib: "AntTweakBar".}
+proc TwInit*(graphAPI: TwGraphAPI; device: pointer): cint {.importc: "TwInit".}
+proc TwTerminate*(): cint {.importc: "TwTerminate".}
+proc TwDraw*(): cint {.importc: "TwDraw".}
+proc TwWindowSize*(width: cint; height: cint): cint {.importc: "TwWindowSize".}
+proc TwSetCurrentWindow*(windowID: cint): cint {.importc: "TwSetCurrentWindow".}
 ## # multi-windows support
 
-proc TwGetCurrentWindow*(): cint {.stdcall, importc: "TwGetCurrentWindow",
-                                dynlib: "AntTweakBar".}
-proc TwWindowExists*(windowID: cint): cint {.stdcall, importc: "TwWindowExists",
-    dynlib: "AntTweakBar".}
+proc TwGetCurrentWindow*(): cint {.importc: "TwGetCurrentWindow".}
+proc TwWindowExists*(windowID: cint): cint {.importc: "TwWindowExists".}
 type
   TwKeyModifier* {.size: sizeof(cint).} = enum
     TW_KMOD_NONE = 0x00000000,  ## # same codes as SDL keysym.mod
@@ -188,10 +199,8 @@ type
 
 
 
-proc TwKeyPressed*(key: cint; modifiers: cint): cint {.stdcall,
-    importc: "TwKeyPressed", dynlib: "AntTweakBar".}
-proc TwKeyTest*(key: cint; modifiers: cint): cint {.stdcall, importc: "TwKeyTest",
-    dynlib: "AntTweakBar".}
+proc TwKeyPressed*(key: cint; modifiers: cint): cint {.importc: "TwKeyPressed".}
+proc TwKeyTest*(key: cint; modifiers: cint): cint {.importc: "TwKeyTest".}
 type
   TwMouseAction* {.size: sizeof(cint).} = enum
     TW_MOUSE_RELEASED, TW_MOUSE_PRESSED
@@ -200,21 +209,16 @@ type
     TW_MOUSE_MIDDLE = 2,        ## # same code as SDL_BUTTON_MIDDLE
     TW_MOUSE_RIGHT = 3          ## # same code as SDL_BUTTON_RIGHT
 
+proc TwMouseButton*(action: TwMouseAction; button: TwMouseButtonID): cint {.
+    importc: "TwMouseButton".}
 
-
-proc TwMouseButton*(action: TwMouseAction; button: TwMouseButtonID): cint {.stdcall,
-    importc: "TwMouseButton", dynlib: "AntTweakBar".}
-proc TwMouseMotion*(mouseX: cint; mouseY: cint): cint {.stdcall,
-    importc: "TwMouseMotion", dynlib: "AntTweakBar".}
-proc TwMouseWheel*(pos: cint): cint {.stdcall, importc: "TwMouseWheel",
-                                  dynlib: "AntTweakBar".}
-proc TwGetLastError*(): cstring {.stdcall, importc: "TwGetLastError",
-                               dynlib: "AntTweakBar".}
+proc TwMouseMotion*(mouseX: cint; mouseY: cint): cint {.importc: "TwMouseMotion".}
+proc TwMouseWheel*(pos: cint): cint {.importc: "TwMouseWheel".}
+proc TwGetLastError*(): cstring {.importc: "TwGetLastError".}
 type
-  TwErrorHandler* = proc (errorMessage: cstring) {.stdcall.}
+  TwErrorHandler* = proc (errorMessage: cstring) 
 
-proc TwHandleErrors*(errorHandler: TwErrorHandler) {.stdcall,
-    importc: "TwHandleErrors", dynlib: "AntTweakBar".}
+proc TwHandleErrors*(errorHandler: TwErrorHandler) {.importc: "TwHandleErrors".}
 ## # ----------------------------------------------------------------------------
 ## #  Helper functions to translate events from some common window management
 ## #  frameworks to AntTweakBar.
@@ -237,21 +241,21 @@ proc TwHandleErrors*(errorHandler: TwErrorHandler) {.stdcall,
 ## # For libSDL event loop
 
 proc TwEventSDL*(sdlEvent: pointer; sdlMajorVersion: cuchar; sdlMinorVersion: cuchar): cint {.
-    stdcall, importc: "TwEventSDL", dynlib: "AntTweakBar".}
+    importc: "TwEventSDL".}
 ## # For GLFW event callbacks
 ## # You should define GLFW_CDECL before including AntTweakBar.h if your version of GLFW uses cdecl calling convensions
 
 when defined(GLFW_CDECL):
   proc TwEventMouseButtonGLFWcdecl(glfwButton: cint; glfwAction: cint): cint {.
-      cdecl, importc: "TwEventMouseButtonGLFWcdecl", dynlib: "AntTweakBar".}
+      cdecl, importc: "TwEventMouseButtonGLFWcdecl".}
   proc TwEventKeyGLFWcdecl(glfwKey: cint; glfwAction: cint): cint {.cdecl,
-      importc: "TwEventKeyGLFWcdecl", dynlib: "AntTweakBar".}
+      importc: "TwEventKeyGLFWcdecl".}
   proc TwEventCharGLFWcdecl(glfwChar: cint; glfwAction: cint): cint {.cdecl,
-      importc: "TwEventCharGLFWcdecl", dynlib: "AntTweakBar".}
+      importc: "TwEventCharGLFWcdecl".}
   proc TwEventMousePosGLFWcdecl(mouseX: cint; mouseY: cint): cint {.cdecl,
-      importc: "TwEventMousePosGLFWcdecl", dynlib: "AntTweakBar".}
+      importc: "TwEventMousePosGLFWcdecl".}
   proc TwEventMouseWheelGLFWcdecl(wheelPos: cint): cint {.cdecl,
-      importc: "TwEventMouseWheelGLFWcdecl", dynlib: "AntTweakBar".}
+      importc: "TwEventMouseWheelGLFWcdecl".}
 
   proc TwEventMouseButtonGLFW*(glfwButton: cint; glfwAction: cint): cint =
     TwEventMouseButtonGLFWcdecl(glfwButton, glfwAction)
@@ -265,12 +269,12 @@ when defined(GLFW_CDECL):
     TwEventMouseWheelGLFWcdecl(wheelPos)
 
 else:
-  proc TwEventMouseButtonGLFW*(glfwButton: cint; glfwAction: cint): cint {.stdcall,
-      importc: "TwEventMouseButtonGLFW", dynlib: "AntTweakBar".}
-  proc TwEventKeyGLFW*(glfwKey: cint; glfwAction: cint): cint {.stdcall,
-      importc: "TwEventKeyGLFW", dynlib: "AntTweakBar".}
-  proc TwEventCharGLFW*(glfwChar: cint; glfwAction: cint): cint {.stdcall,
-      importc: "TwEventCharGLFW", dynlib: "AntTweakBar".}
+  proc TwEventMouseButtonGLFW*(glfwButton: cint; glfwAction: cint): cint {.
+      importc: "TwEventMouseButtonGLFW".}
+  proc TwEventKeyGLFW*(glfwKey: cint; glfwAction: cint): cint {.
+      importc: "TwEventKeyGLFW".}
+  proc TwEventCharGLFW*(glfwChar: cint; glfwAction: cint): cint {.
+      importc: "TwEventCharGLFW".}
   proc TwEventMousePosGLFW*(mouseX: cint; mouseY: cint): cint =
     TwMouseMotion(mouseX, mouseY)
   proc TwEventMouseWheelGLFW*(wheelPos: cint): cint =
@@ -280,19 +284,19 @@ else:
     
 proc TwEventMouseButtonGLUT*(glutButton: cint; glutState: cint; mouseX: cint;
                             mouseY: cint): cint {.cdecl,
-    importc: "TwEventMouseButtonGLUT", dynlib: "AntTweakBar".}
+    importc: "TwEventMouseButtonGLUT".}
 
 proc TwEventMouseMotionGLUT*(mouseX: cint; mouseY: cint): cint {.cdecl,
-    importc: "TwEventMouseMotionGLUT", dynlib: "AntTweakBar".}
+    importc: "TwEventMouseMotionGLUT".}
 
 proc TwEventKeyboardGLUT*(glutKey: cuchar; mouseX: cint; mouseY: cint): cint {.cdecl,
-    importc: "TwEventKeyboardGLUT", dynlib: "AntTweakBar".}
+    importc: "TwEventKeyboardGLUT".}
 
 proc TwEventSpecialGLUT*(glutKey: cint; mouseX: cint; mouseY: cint): cint {.cdecl,
-    importc: "TwEventSpecialGLUT", dynlib: "AntTweakBar".}
+    importc: "TwEventSpecialGLUT".}
 
 proc TwGLUTModifiersFunc*(glutGetModifiersFunc: proc (): cint {.stdcall.}): cint {.
-    stdcall, importc: "TwGLUTModifiersFunc", dynlib: "AntTweakBar".}
+    importc: "TwGLUTModifiersFunc".}
 
 type
   GLUTmousebuttonfun* = proc (glutButton: cint; glutState: cint; mouseX: cint;
@@ -310,9 +314,7 @@ type
 ## # For SFML event loop
 
 proc TwEventSFML*(sfmlEvent: pointer; sfmlMajorVersion: cuchar;
-                 sfmlMinorVersion: cuchar): cint {.stdcall, importc: "TwEventSFML",
-    dynlib: "AntTweakBar".}
+                 sfmlMinorVersion: cuchar): cint {.importc: "TwEventSFML".}
 ## # For X11 event loop
 
-proc TwEventX11*(xevent: pointer): cint {.stdcall, importc: "TwEventX11",
-                                      dynlib: "AntTweakBar".}
+proc TwEventX11*(xevent: pointer): cint {.importc: "TwEventX11".}
