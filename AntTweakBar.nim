@@ -20,7 +20,7 @@
 
 const TW_VERSION* = 116
 
-{.passC: "-IcAntTweakBar/include".}
+{.passC: "-I" & staticExec("nimble path AntTweakBar") & "/cAntTweakBar/include" .}
 {.passC: "-O3 -Wall -fPIC -fno-strict-aliasing -D__PLACEMENT_NEW_INLINE".}
 {.passL: "-lGL -lm -lstdc++".}
 
