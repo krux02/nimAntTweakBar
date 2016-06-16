@@ -240,7 +240,7 @@ proc TwHandleErrors*(errorHandler: TwErrorHandler) {.importc: "TwHandleErrors".}
 ## #
 ## # For libSDL event loop
 
-proc TwEventSDL*(sdlEvent: pointer; sdlMajorVersion: uint8; sdlMinorVersion: uint8): cint {.
+proc TwEventSDL*(sdlEvent: pointer; sdlMajorVersion: cuchar; sdlMinorVersion: cuchar): cint {.
     importc: "TwEventSDL".}
 ## # For GLFW event callbacks
 ## # You should define GLFW_CDECL before including AntTweakBar.h if your version of GLFW uses cdecl calling convensions
