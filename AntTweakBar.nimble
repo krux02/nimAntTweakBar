@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.0.0"
+version       = "1.0.1"
 author        = "Arne Döring"
 description   = "nim wrapper around the AntTweakBar c library"
 license       = "MIT"
@@ -104,6 +104,3 @@ installFiles  = @[
 # Dependencies
 
 requires "nim >= 0.12.0"
-
-
-
