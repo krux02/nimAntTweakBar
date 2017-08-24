@@ -2,8 +2,8 @@
 ## #
 ## #  @file       AntTweakBar.h
 ## #
-## #  @brief      AntTweakBar is a light and intuitive graphical user interface 
-## #              that can be readily integrated into OpenGL and DirectX 
+## #  @brief      AntTweakBar is a light and intuitive graphical user interface
+## #              that can be readily integrated into OpenGL and DirectX
 ## #              applications in order to interactively tweak parameters.
 ## #
 ## #  @author     Philippe Decaudin
@@ -20,9 +20,15 @@
 
 const TW_VERSION* = 116
 
-from strutils import strip
+from strutils import strip, splitLines
 
-{.passC: "-I" & strip(staticExec("nimble path AntTweakBar")) & "/cAntTweakBar/include" .}
+proc getAntTweakBarPath(): string {.compileTime.} =
+  for line in splitLines(staticExec("nimble path AntTweakBar")):
+    # get the last line and avoid all Hints and Warnings sont to stdout
+    result = line
+  result = strip(result)
+
+{.passC: "-I" & getAntTweakBarPath() & "/cAntTweakBar/include" .}
 {.passC: "-O3 -Wall -fPIC -fno-strict-aliasing -D__PLACEMENT_NEW_INLINE".}
 {.passL: "-lGL -lm -lstdc++".}
 
@@ -105,7 +111,7 @@ type
 
 template TW_TYPE_CSSTRING*(n: int): TwType =
   cast[TwType](0x30000000 + ((n) and 0x0FFFFFFF)) ## # Null-terminated C Static String of size n (defined as char[n], with n<2^28)
-  
+
 type
   TwSetVarCallback* = proc (value: pointer; clientData: pointer)
   TwGetVarCallback* = proc (value: pointer; clientData: pointer)
@@ -121,7 +127,7 @@ proc TwAddVarCB*(bar: ptr TwBar; name: cstring; `type`: TwType;
 proc TwAddButton*(bar: ptr TwBar; name: cstring; callback: TwButtonCallback;
                  clientData: pointer; def: cstring): cint {.importc: "TwAddButton".}
 proc TwAddSeparator*(bar: ptr TwBar; name: cstring; def: cstring): cint {.importc: "TwAddSeparator".}
-proc TwRemoveVar*(bar: ptr TwBar; name: cstring): cint {.importc: "TwRemoveVar".} 
+proc TwRemoveVar*(bar: ptr TwBar; name: cstring): cint {.importc: "TwRemoveVar".}
 proc TwRemoveAllVars*(bar: ptr TwBar): cint {.importc: "TwRemoveAllVars".}
 type
   TwEnumVal* = object
@@ -156,7 +162,7 @@ proc TwCopyCDStringToLibrary*(destinationLibraryStringPtr: cstringArray;
     importc: "TwCopyCDStringToLibrary".}
 type
   TwParamValueType* {.size: sizeof(cint).} = enum
-    TW_PARAM_INT32, TW_PARAM_FLOAT, TW_PARAM_DOUBLE, TW_PARAM_CSTRING ## # 
+    TW_PARAM_INT32, TW_PARAM_FLOAT, TW_PARAM_DOUBLE, TW_PARAM_CSTRING ## #
                                                                   ## Null-terminated array of char (ie, c-string)
 
 
@@ -218,7 +224,7 @@ proc TwMouseMotion*(mouseX: cint; mouseY: cint): cint {.importc: "TwMouseMotion"
 proc TwMouseWheel*(pos: cint): cint {.importc: "TwMouseWheel".}
 proc TwGetLastError*(): cstring {.importc: "TwGetLastError".}
 type
-  TwErrorHandler* = proc (errorMessage: cstring) 
+  TwErrorHandler* = proc (errorMessage: cstring)
 
 proc TwHandleErrors*(errorHandler: TwErrorHandler) {.importc: "TwHandleErrors".}
 ## # ----------------------------------------------------------------------------
@@ -283,10 +289,10 @@ else:
     TwMouseWheel(wheelPos)
 
 ## # For GLUT event callbacks (Windows calling convention for GLUT callbacks is cdecl)
-    
-proc TwEventMouseButtonGLUT*(glutButton, glutState, mouseX, mouseY: cint): cint 
-  {.cdecl, importc: "TwEventMouseButtonGLUT".} 
-proc TwEventMouseMotionGLUT*(mouseX, mouseY: cint): cint 
+
+proc TwEventMouseButtonGLUT*(glutButton, glutState, mouseX, mouseY: cint): cint
+  {.cdecl, importc: "TwEventMouseButtonGLUT".}
+proc TwEventMouseMotionGLUT*(mouseX, mouseY: cint): cint
   {.cdecl, importc: "TwEventMouseMotionGLUT".}
 proc TwEventKeyboardGLUT*(glutKey: cuchar; mouseX, mouseY: cint): cint
   {.cdecl, importc: "TwEventKeyboardGLUT".}
