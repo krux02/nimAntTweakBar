@@ -1,6 +1,15 @@
-#AntTweakBar
-nim wrapper for the ant tweak bar. At the moment it is only tested on linux, and not on any other platform. There is probably somethinng to do, to support windows and osx, too. But since AntTweakBar is pretty good support for those platforms, too, it should be pretty simple
+# AntTweakBar
+
+Nim wrapper for the ant tweak bar library. At the moment it is only tested on linux, but it should work on other platforms, too. If there are problems with other platforms please report them.
+
+# SDL2 support
+
+Yes there is SDL2 support. The original library did miss this, I added this.
+
+# Do I need AntTweakBar on my system?
+
+No you do not need it. This library contains all source code of AntTweakBar and compiles it with the normal nim compilation command. No external libraries required.
 
 ## Documentation
 
-for the documentation, please refer to the original documentataino at http://anttweakbar.sourceforge.net/doc/
+For the documentation, please refer to the original documentataino at http://anttweakbar.sourceforge.net/doc/
