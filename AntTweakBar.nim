@@ -20,13 +20,18 @@
 
 const TW_VERSION* = 116
 
-from strutils import strip, splitLines
+const antTweakBarPath =
+  when not defined(antTweakBarNoNimble):
+    proc getAntTweakBarPath(): string {.compileTime.} =
+      "."
+  else:
+    from strutils import strip, splitLines
 
-proc getAntTweakBarPath(): string {.compileTime.} =
-  for line in splitLines(staticExec("nimble path AntTweakBar")):
-    # get the last line and avoid all Hints and Warnings sont to stdout
-    result = line
-  result = strip(result)
+    proc getAntTweakBarPath(): string {.compileTime.} =
+      for line in splitLines(staticExec("nimble path AntTweakBar")):
+        # get the last line and avoid all Hints and Warnings sont to stdout
+        result = line
+      result = strip(result)
 
 {.passC: "-I" & getAntTweakBarPath() & "/cAntTweakBar/include" .}
 {.passC: "-O3 -Wall -fPIC -fno-strict-aliasing -D__PLACEMENT_NEW_INLINE".}
