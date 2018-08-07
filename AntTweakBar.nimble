@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.0.1"
+version       = "1.0.2"
 author        = "Arne Döring"
 description   = "nim wrapper around the AntTweakBar c library"
 license       = "MIT"
