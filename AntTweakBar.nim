@@ -73,23 +73,23 @@ else:
 ## # ----------------------------------------------------------------------------
 
 type
-  TwBar* = distinct tuple[]
+  TwBar* = ptr object
 
 ## # structure CTwBar is not exposed.
 
-proc TwNewBar*(barName: cstring): ptr TwBar {.importc:"TwNewBar" .}
-proc TwDeleteBar*(bar: ptr TwBar): cint {.importc:"TwDeleteBar" .}
+proc TwNewBar*(barName: cstring): TwBar {.importc:"TwNewBar" .}
+proc TwDeleteBar*(bar: TwBar): cint {.importc:"TwDeleteBar" .}
 proc TwDeleteAllBars*(): cint {.importc: "TwDeleteAllBars".}
-proc TwSetTopBar*(bar: ptr TwBar): cint {.importc: "TwSetTopBar".}
-proc TwGetTopBar*(): ptr TwBar {.importc: "TwGetTopBar".}
-proc TwSetBottomBar*(bar: ptr TwBar): cint {.importc: "TwSetBottomBar".}
-proc TwGetBottomBar*(): ptr TwBar {.importc: "TwGetBottomBar".}
-proc TwGetBarName*(bar: ptr TwBar): cstring {.importc: "TwGetBarName".}
+proc TwSetTopBar*(bar: TwBar): cint {.importc: "TwSetTopBar".}
+proc TwGetTopBar*(): TwBar {.importc: "TwGetTopBar".}
+proc TwSetBottomBar*(bar: TwBar): cint {.importc: "TwSetBottomBar".}
+proc TwGetBottomBar*(): TwBar {.importc: "TwGetBottomBar".}
+proc TwGetBarName*(bar: TwBar): cstring {.importc: "TwGetBarName".}
 proc TwGetBarCount*(): cint {.importc: "TwGetBarCount".}
-proc TwGetBarByIndex*(barIndex: cint): ptr TwBar {.importc: "TwGetBarByIndex".}
-proc TwGetBarByName*(barName: cstring): ptr TwBar {.importc: "TwGetBarByName".}
-proc TwRefreshBar*(bar: ptr TwBar): cint {.importc: "TwRefreshBar".}
-proc TwGetActiveBar*(): ptr TwBar {.importc: "TwGetActiveBar".}
+proc TwGetBarByIndex*(barIndex: cint): TwBar {.importc: "TwGetBarByIndex".}
+proc TwGetBarByName*(barName: cstring): TwBar {.importc: "TwGetBarByName".}
+proc TwRefreshBar*(bar: TwBar): cint {.importc: "TwRefreshBar".}
+proc TwGetActiveBar*(): TwBar {.importc: "TwGetActiveBar".}
 
 ## # ----------------------------------------------------------------------------
 ## #  Var functions and definitions
@@ -120,18 +120,18 @@ type
   TwGetVarCallback* = proc (value: pointer; clientData: pointer)
   TwButtonCallback* = proc (clientData: pointer)
 
-proc TwAddVarRW*(bar: ptr TwBar; name: cstring; `type`: TwType; `var`: pointer;
+proc TwAddVarRW*(bar: TwBar; name: cstring; `type`: TwType; `var`: pointer;
                 def: cstring): cint {.importc: "TwAddVarRW".}
-proc TwAddVarRO*(bar: ptr TwBar; name: cstring; `type`: TwType; `var`: pointer;
+proc TwAddVarRO*(bar: TwBar; name: cstring; `type`: TwType; `var`: pointer;
                 def: cstring): cint {.importc: "TwAddVarRO".}
-proc TwAddVarCB*(bar: ptr TwBar; name: cstring; `type`: TwType;
+proc TwAddVarCB*(bar: TwBar; name: cstring; `type`: TwType;
                 setCallback: TwSetVarCallback; getCallback: TwGetVarCallback;
                 clientData: pointer; def: cstring): cint {.importc: "TwAddVarCB".}
-proc TwAddButton*(bar: ptr TwBar; name: cstring; callback: TwButtonCallback;
+proc TwAddButton*(bar: TwBar; name: cstring; callback: TwButtonCallback;
                  clientData: pointer; def: cstring): cint {.importc: "TwAddButton".}
-proc TwAddSeparator*(bar: ptr TwBar; name: cstring; def: cstring): cint {.importc: "TwAddSeparator".}
-proc TwRemoveVar*(bar: ptr TwBar; name: cstring): cint {.importc: "TwRemoveVar".}
-proc TwRemoveAllVars*(bar: ptr TwBar): cint {.importc: "TwRemoveAllVars".}
+proc TwAddSeparator*(bar: TwBar; name: cstring; def: cstring): cint {.importc: "TwAddSeparator".}
+proc TwRemoveVar*(bar: TwBar; name: cstring): cint {.importc: "TwRemoveVar".}
+proc TwRemoveAllVars*(bar: TwBar): cint {.importc: "TwRemoveAllVars".}
 type
   TwEnumVal* = object
     Value*: cint
@@ -169,10 +169,10 @@ type
                                                                   ## Null-terminated array of char (ie, c-string)
 
 
-proc TwGetParam*(bar: ptr TwBar; varName: cstring; paramName: cstring;
+proc TwGetParam*(bar: TwBar; varName: cstring; paramName: cstring;
                 paramValueType: TwParamValueType; outValueMaxCount: cuint;
                 outValues: pointer): cint {.importc: "TwGetParam".}
-proc TwSetParam*(bar: ptr TwBar; varName: cstring; paramName: cstring;
+proc TwSetParam*(bar: TwBar; varName: cstring; paramName: cstring;
                 paramValueType: TwParamValueType; inValueCount: cuint;
                 inValues: pointer): cint {.importc: "TwSetParam".}
 ## # ----------------------------------------------------------------------------
