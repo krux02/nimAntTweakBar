@@ -169,15 +169,6 @@ proc main(): int =
                   # Resize OpenGL viewport
                   glViewport(0, 0, width, height)
 
-                  # Restore OpenGL states (SDL seems to lost them)
-                  glEnable(GL_DEPTH_TEST)
-                  glEnable(GL_LIGHTING)
-                  glEnable(GL_LIGHT0)
-                  glEnable(GL_NORMALIZE)
-                  glEnable(GL_COLOR_MATERIAL)
-                  glDisable(GL_CULL_FACE)
-                  glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE)
-
                   # TwWindowSize has been called by TwEventSDL,
                   # so it is not necessary to call it again here.
 
