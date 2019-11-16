@@ -13,3 +13,7 @@ No you do not need it. This library contains all source code of AntTweakBar and 
 ## Documentation
 
 For the documentation, please refer to the original documentataino at http://anttweakbar.sourceforge.net/doc/
+
+## Help Wanted
+
+I am a purle Linux developer. People who what to run this on Windows and OSX, help is very welcome. 
