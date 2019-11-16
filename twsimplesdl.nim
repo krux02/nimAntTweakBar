@@ -174,7 +174,6 @@ proc main(): int =
 
               of KEYDOWN:
                   if event.key.keysym.scancode == SCANCODE_SPACE: # toggle fullscreen if Space key is pressed
-                    var mode: sdl.DisplayMode
                     if (sdl.getWindowFlags(window) and sdl.WINDOW_FULLSCREEN_DESKTOP) == 0:
                       discard setWindowFullscreen(window, sdl.WINDOW_FULLSCREEN_DESKTOP)
                     else:

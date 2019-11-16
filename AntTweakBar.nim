@@ -27,20 +27,22 @@ else:
   from strutils import strip, splitLines
   proc getAntTweakBarPath(): string {.compileTime.} =
     for line in splitLines(staticExec("nimble path AntTweakBar")):
-      # get the last line and avoid all Hints and Warnings sont to stdout
+      # Get the last line and avoid all Hints and Warnings sent to stdout.
       result = line
     result = strip(result)
 
 {.passC: "-I" & getAntTweakBarPath() & "/cAntTweakBar/include" .}
 {.passC: "-O3 -Wall -fPIC -fno-strict-aliasing -D__PLACEMENT_NEW_INLINE".}
-{.passL: "-lGL -lm -lstdc++".}
+{.passL: "-lm -lstdc++".}
 
 when defined(windows):
+  {.passL: "-lopengl".}
   {.compile: "cAntTweakBar/src/TwEventWin.c".}
   {.compile: "cAntTweakBar/src/TwDirect3D10.cpp".}
   {.compile: "cAntTweakBar/src/TwDirect3D11.cpp".}
   {.compile: "cAntTweakBar/src/TwDirect3D9.cpp".}
 else:
+  {.passL: "-lGL".}
   {.passL: "-lX11".}
   {.passC: "-I/usr/X11R6/include -D_UNIX".}
   {.compile: "cAntTweakBar/src/TwEventX11.c".}
