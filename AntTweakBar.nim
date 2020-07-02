@@ -18,11 +18,15 @@
 
 ## # Version Mmm : M=Major mm=minor (e.g., 102 is version 1.02)
 
-const TW_VERSION* = 116
+import std/compilesettings
 
-when defined(antTweakBarNoNimble):
+const TW_VERSION* = 116
+when defined(antTweakBarNoNimble) or len(querySettingSeq(nimblePaths)) == 0: # compiled with --noNimblePath
+  import os
   proc getAntTweakBarPath(): string {.compileTime.} =
-    "."
+    result = os.parentDir(currentSourcePath())
+    echo result
+    # "."
 else:
   from strutils import strip, splitLines
   proc getAntTweakBarPath(): string {.compileTime.} =
@@ -142,10 +146,10 @@ type
   TwStructMember* = object
     Name*: cstring
     Type*: TwType
-    Offset*: csize
+    Offset*: csize_t
     DefString*: cstring
 
-  TwSummaryCallback* = proc (summaryString: cstring; summaryMaxLength: csize;
+  TwSummaryCallback* = proc (summaryString: cstring; summaryMaxLength: csize_t;
                           value: pointer; clientData: pointer)
 
 proc TwDefine*(def: cstring): cint {.importc: "TwDefine".}
@@ -153,7 +157,7 @@ proc TwDefineEnum*(name: cstring; enumValues: ptr TwEnumVal; nbValues: cuint): T
     importc: "TwDefineEnum" .}
 proc TwDefineEnumFromString*(name: cstring; enumString: cstring): TwType {.importc: "TwDefineEnumFromString".}
 proc TwDefineStruct*(name: cstring; structMembers: ptr TwStructMember;
-                    nbMembers: cuint; structSize: csize;
+                    nbMembers: cuint; structSize: csize_t;
                     summaryCallback: TwSummaryCallback; summaryClientData: pointer): TwType {.
     importc: "TwDefineStruct".}
 type
